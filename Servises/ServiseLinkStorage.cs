@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Servises.Extension;
 using Microsoft.Extensions.Options;
 using Servises.Options;
+using System.Web;
 
 namespace Servises;
 
@@ -26,7 +27,7 @@ public class ServiseLinkStorage : IServiseLinkStorage
     
     public async Task<string> CreateShortToken(Uri uri)
     {
-        var url = uri.ToString();
+        var url = HttpUtility.UrlPathEncode(uri.ToString());
         var crc32 = await GetCrc32Async(url);
         var models = await _repo.GetModelsAsync(e => e.LinkKey.Equals(crc32));
 
