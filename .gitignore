@@ -2,9 +2,10 @@
 *.v2
 *.vsidx
 *.lock
-.vs/LinkShorteningService/v17/.suo
 *.2
 *.dll
 *.pdb
 */obj/*
 */bin/*
+*/.vs/*
+
