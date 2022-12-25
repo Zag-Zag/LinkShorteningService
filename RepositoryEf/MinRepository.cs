@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace DataBaseEf.Repository;
 
-public abstract class MinRepository: IDisposable 
+public abstract class MinRepository
 {
     private DbContext _context;
 
@@ -28,14 +28,4 @@ public abstract class MinRepository: IDisposable
 
     protected void SaveChanges() => _context.SaveChanges();
     protected async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-
-    public void Dispose()
-    {
-        if (_context != default)
-        {
-            _context.Dispose();
-            _context = default;
-        }
-        GC.SuppressFinalize(this);
-    }
 }

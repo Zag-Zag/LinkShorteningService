@@ -12,7 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Di
+//builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddDbContext<DbContext, ContextEf>(
                     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

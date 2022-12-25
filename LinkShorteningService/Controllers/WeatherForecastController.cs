@@ -1,4 +1,4 @@
-//using DataBaseEf;
+/*//using DataBaseEf;
 //using DataBaseEf.Model;
 using DataBaseEf;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace LinkShorteningService.Controllers
         /*public HomeController(IOptions<MyConfig> config)
         {
             this.config = config;
-        }*/
+        }
 
         //private readonly ILogger<WeatherForecastController> _logger;
         private IServiseLinkStorage _servise;
@@ -33,10 +33,9 @@ namespace LinkShorteningService.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IList<Repository.Model.LinkStorageBaseModel> Get()
         {
-            //_servise.SaveToRepo(null);
             _servise.GetModels();
             return _servise.GetModels();
             
         }
     }
-}
+}*/

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace AbstractDependencies.Interface.Repositoryes;
 
-public interface IRepository<TEntity, TModel>: IDisposable
+public interface IRepository<TEntity, TModel>
     where TEntity : BaseEntityModel
     where TModel : IBusinessModel
 {
@@ -14,5 +14,5 @@ public interface IRepository<TEntity, TModel>: IDisposable
     public Task<IList<TModel>> GetModelsAsync(IQueryable<TEntity> queryDb);
     public Task<IList<TModel>> GetModelsAsync();
     public void Save(TModel models);
-    public void SaveAsync(TModel models);
+    public Task SaveAsync(TModel models);
 }

@@ -44,6 +44,6 @@ public abstract class Repository<TEntity, TModel> : BaseRepository<TEntity>, IRe
 
     public virtual void Save(TModel models) => Save(ProjectToEntity(models));
 
-    public virtual async void SaveAsync(TModel models) => await SaveAsync(ProjectToEntity(models));
+    public virtual async Task SaveAsync(TModel models) => await SaveAsync(ProjectToEntity(models));
 
 }

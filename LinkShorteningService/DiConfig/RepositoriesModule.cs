@@ -9,5 +9,5 @@ namespace LinkShorteningService.DiConfig;
 public class RepositoriesModule : IDiModule
 {
     public IServiceCollection Registration(IServiceCollection services) =>
-        services.AddTransientDeligate<IRepositoryLinkStorage, RepositoryLinkStorage>();
+        services.AddScoped<IRepositoryLinkStorage, RepositoryLinkStorage>();
 }
