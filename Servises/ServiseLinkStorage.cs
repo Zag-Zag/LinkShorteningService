@@ -3,30 +3,32 @@ using Aspose.BarCode.Generation;
 using Force.Crc32;
 using Repository.Interface.Repositoryes;
 using Servises.Interface;
-using System.Drawing.Imaging;
-
 using System.Text;
-
-
-using System;
 using System.Drawing;
-using System.IO;
-//using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Http;
+using Servises.Extension;
+using Microsoft.Extensions.Options;
+using Servises.Options;
+using System;
 
 namespace Servises;
 
 public class ServiseLinkStorage : IServiseLinkStorage
 {
-
     private readonly IRepositoryLinkStorage _repo;
-
-    public ServiseLinkStorage(IRepositoryLinkStorage repo) => _repo = repo;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IOptions<ServiseOptions> _config;
+    public ServiseLinkStorage(IRepositoryLinkStorage repo, IHttpContextAccessor httpContextAccessor, IOptions<ServiseOptions> config)
+    {
+        _repo = repo;
+        _httpContextAccessor = httpContextAccessor;
+        _config = config;
+    }
     
     public async Task<string> CreateShortToken(Uri uri)
     {
         var url = uri.ToString();
-        var crc32 = $"{Crc32CAlgorithm.Compute(Encoding.ASCII.GetBytes(url)):X}";
+        var crc32 = await GetCrc32Async(url);
         var models = await _repo.GetModelsAsync(e => e.LinkKey.Equals(crc32));
 
         if (models.Count.Equals(0))
@@ -37,29 +39,24 @@ public class ServiseLinkStorage : IServiseLinkStorage
                 LinkValue = url
             });
         }
-        //PhysicalFile
         return crc32;
     }
+
+    private static async Task<string> GetCrc32Async(string url) => await Task.Run(() => $"{Crc32CAlgorithm.Compute(Encoding.ASCII.GetBytes(url)):X}");
 
     public byte[] GenerateBarcodeForUrl(Uri uri)
     {
         using var generator = new BarcodeGenerator(EncodeTypes.QR, uri.ToString());
-        generator.Parameters.Resolution = 400;
+        generator.Parameters.Resolution = _config.Value.CodeResolution;
 
         return (byte[])new ImageConverter().ConvertTo(generator.GenerateBarCodeImage(), typeof(byte[]));
     }
 
     public async Task<byte[]> GenerateBarcodeForUrlAsync(Uri uri) => await Task.Run(() => GenerateBarcodeForUrl(uri));
 
-    public async Task<Uri> RegistrationNewUrlAsync(Uri uri, string baseUrl) => CreateShortUri(await CreateShortToken(uri), baseUrl);
-    private static Uri CreateShortUri(string kyeUri, string bseUrl )
-    {
-        if (!Uri.TryCreate(new Uri(bseUrl), kyeUri, out Uri newUri))
-        {
-            // TODO: Add text error
-            throw new Exception();
-        }
-        return newUri;
-    }
+    public async Task<Uri> RegistrationNewUrlAsync(Uri uri) => CreateShortUri(await CreateShortToken(uri));
 
+    private Uri CreateShortUri(string kyeUri) => Uri.TryCreate(new Uri(_httpContextAccessor.HttpContext.Request.BaseUrl()), kyeUri, out Uri newUri)
+        ? newUri
+        : throw new Exception(/*TODO: Add text exception*/);
 }

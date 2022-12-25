@@ -98,7 +98,6 @@ public abstract class BaseRepository<TEntity> : MinRepository
 
     }
 
-
     #region IQueryable
     protected IQueryable<TEntity> GetQueryables() => ContextDb<TEntity>();
     protected IQueryable<TEntity> GetQueryables(Expression<Func<TEntity, bool>> condition) => GetQueryables<TEntity>().Where(condition);
@@ -108,8 +107,9 @@ public abstract class BaseRepository<TEntity> : MinRepository
     protected virtual bool IsANewEntity(TEntity entity) => entity.Id.Equals(Guid.Empty);
     protected virtual async Task<bool> IsANewEntityAsync(TEntity entity) => await Task.Run(() => IsANewEntity(entity));
 
-    // TODO: MSG to constant!
-    protected virtual ResultModel ValidationEntityModel(TEntity entity) => new(entity == default ? "No values save" : string.Empty);
+    protected virtual ResultModel ValidationEntityModel(TEntity entity) => entity == default
+        ? new(new Exception() /* TODO: Add message text */)
+        : new();
 
     public void ClearIgnore()
     {

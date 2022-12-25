@@ -9,5 +9,6 @@ public class DiModule : IDiModule
     public IServiceCollection Registration(IServiceCollection services) =>
         services
             .AddModule<RepositoriesModule>()
-            .AddModule<ServicesModule>();
+            .AddModule<ServicesModule>()
+            .AddModule<AutomapperModule>();
 }

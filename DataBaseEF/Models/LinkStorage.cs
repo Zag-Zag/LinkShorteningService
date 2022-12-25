@@ -2,7 +2,7 @@
 
 namespace DataBaseEf.Model;
 
-public partial class LinkStorage : BaseEntityModel
+public class LinkStorage : BaseEntityModel
 {
     public string LinkValue { get; set; } = null!;
     public string LinkKey { get; set; } = null!;

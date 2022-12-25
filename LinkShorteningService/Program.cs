@@ -2,6 +2,7 @@ using DataBaseEf;
 using LinkShorteningService.DiConfig;
 using LinkShorteningService.Extension;
 using Microsoft.EntityFrameworkCore;
+using Servises.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +13,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddDbContext<DbContext, ContextEf>(
-                    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options => options
+            .UseSqlServer(builder.Configuration.GetConnectionString(typeof(ContextEf).Name)));
+
 builder.Services.AddModule<DiModule>();
+
+builder.Services.AddOptions();
+builder.Services.Configure<ServiseOptions>(builder.Configuration.GetSection(typeof(ServiseOptions).Name));
 
 var app = builder.Build();
 
-//builder.Services.Configure<LinkShorteningConfiguration>(app. .GetSection("LinkShorteningConfiguration"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

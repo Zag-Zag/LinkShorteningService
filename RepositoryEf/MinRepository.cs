@@ -6,7 +6,7 @@ namespace DataBaseEf.Repository;
 
 public abstract class MinRepository
 {
-    private DbContext _context;
+    private readonly DbContext _context;
 
     public MinRepository(DbContext context)
     {

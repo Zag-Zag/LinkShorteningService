@@ -1,12 +1,12 @@
-﻿using DataBaseEf.Model;
+﻿using AutoMapper;
+using DataBaseEf.Model;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interface.Repositoryes;
 using Repository.Model;
 
-namespace Repository
+namespace Repository;
+
+public class RepositoryLinkStorage: Repository<LinkStorage, LinkStorageBaseModel>, IRepositoryLinkStorage
 {
-    public class RepositoryLinkStorage: Repository<LinkStorage, LinkStorageBaseModel>, IRepositoryLinkStorage
-    {
-        public RepositoryLinkStorage(DbContext context) : base(context) { }
-    }
+    public RepositoryLinkStorage(DbContext context, IMapper mapper) : base(context, mapper) { }
 }

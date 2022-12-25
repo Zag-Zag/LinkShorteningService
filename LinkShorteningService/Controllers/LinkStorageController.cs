@@ -1,32 +1,30 @@
 
-using Azure.Core;
-using LinkShorteningService.Extension;
-using LinkShorteningService.Models;
+using LinkShorteningService.Controllers.Base;
+using LinkShorteningService.Controllers.Models;
 using Microsoft.AspNetCore.Mvc;
 using Servises.Interface;
 
-namespace LinkShorteningService.Controllers
-{
-    [ApiController]
-    [Route("[controller]")]
-    public class LinkStorageController : ControllerBase
-    {
-        private readonly IServiseLinkStorage _servise;
-        public LinkStorageController(IServiseLinkStorage servise)
-        {
-            _servise = servise;
-        }
+namespace LinkStorageController.Controllers;
 
-        [HttpPost]
-        [Route("CreateShortLink")]
-        public async Task<IActionResult> CreateShortLink(Uri url)
-        {
-            var sjortUri = await _servise.RegistrationNewUrlAsync(url, Request.BaseUrl());
-            return Ok(new LinkStorageServiceModel()
-            {
-                Url = sjortUri,
-                BarCode = File(await _servise.GenerateBarcodeForUrlAsync(sjortUri), "img/jpg")
-            });
-        }
+[ApiController]
+[Route("[controller]")]
+public class LinkStorageController : AbstractController
+{
+    private readonly IServiseLinkStorage _servise;
+    public LinkStorageController(IServiseLinkStorage servise)
+    {
+        _servise = servise;
     }
+
+    [HttpPost]
+    [Route("CreateShortLink")]
+    public async Task<IActionResult> CreateShortLink(Uri url) => await ExecuteAnActionAsync(async () =>
+    {
+        var sjortUri = await _servise.RegistrationNewUrlAsync(url);
+        return Ok(new LinkStorageServiceModel()
+        {
+            Url = sjortUri,
+            BarCode = await Task.Run(async () => File(await _servise.GenerateBarcodeForUrlAsync(sjortUri), "image/jpg"))
+        });
+    }); 
 }

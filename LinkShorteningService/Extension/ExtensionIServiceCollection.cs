@@ -12,5 +12,4 @@ public static class ExtensionIServiceCollection
                 .AddTransient(Func<Interface> (servicesProvider) => () => servicesProvider.GetRequiredService<Interface>());
     public static IServiceCollection AddModule<TModule>(this IServiceCollection services)
         where TModule : IDiModule, new() => new TModule().Registration(services);
-
 }

@@ -4,7 +4,7 @@ using Repository.Model;
 
 namespace Repository;
 
-internal class StatisticsPropertyProfile : Profile
+public class StatisticsPropertyProfile : Profile
 {
     public StatisticsPropertyProfile() 
     {

@@ -14,9 +14,8 @@ public abstract class Repository<TEntity, TModel> : BaseRepository<TEntity>, IRe
     where TEntity : BaseEntityModel
     where TModel : IBusinessModel
 {
-    private readonly IMapper _mapper = Automapper.Mapper;
-    public Repository(DbContext context) : base(context) { }
-
+    private readonly IMapper _mapper;
+    public Repository(DbContext context, IMapper mapper) : base(context) => _mapper = mapper;
 
     protected IQueryable<TModel> GetQueryableModels() => GetQueryableModels(ContextDb);
 
@@ -43,7 +42,5 @@ public abstract class Repository<TEntity, TModel> : BaseRepository<TEntity>, IRe
     protected TModel ProjectToModel(TEntity models) => _mapper.Map<TModel>(models);
 
     public virtual void Save(TModel models) => Save(ProjectToEntity(models));
-
     public virtual async Task SaveAsync(TModel models) => await SaveAsync(ProjectToEntity(models));
-
 }
