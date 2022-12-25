@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace LinkShorteningService.Controllers.Base;
-
+/// 
 public abstract class AbstractController : ControllerBase
 {
+    ///
+    [NonAction]
     protected IActionResult ExecuteAnAction(Func<IActionResult> func)
     {
         try
@@ -15,24 +17,21 @@ public abstract class AbstractController : ControllerBase
             return WebExeption(ex);
         }
     }
-
-    protected async Task<IActionResult> ExecuteAnActionAsync(Func<IActionResult> func)
+    ///
+    [NonAction]
+    protected async Task<IActionResult> ExecuteAnActionAsync(Func<IActionResult> func) =>
+        await ExecuteAnActionAsync(async () => await Task.Run(() => func()), (e) => Ok(e));
+    ///
+    [NonAction]
+    protected async Task<IActionResult> ExecuteAnActionAsync(Func<Task<IActionResult>> func) =>
+        await ExecuteAnActionAsync(func, (e) => Ok(e));
+    ///
+    [NonAction]
+    protected async Task<IActionResult> ExecuteAnActionAsync<T>(Func<Task<T>> func, Func<T, IActionResult> createrResult)
     {
         try
         {
-            return Ok(await Task.Run(() => func()));
-        }
-        catch (Exception ex)
-        {
-            return WebExeption(ex);
-        }
-    }
-
-    protected async Task<IActionResult> ExecuteAnActionAsync(Func<Task<IActionResult>> func)
-    {
-        try
-        {
-            return Ok(await func());
+            return createrResult(await func());
         }
         catch (Exception ex)
         {

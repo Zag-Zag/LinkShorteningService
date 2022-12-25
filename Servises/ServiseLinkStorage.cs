@@ -10,6 +10,8 @@ using Servises.Extension;
 using Microsoft.Extensions.Options;
 using Servises.Options;
 using System;
+using System.Linq;
+using DataBaseEf.Extension;
 
 namespace Servises;
 
@@ -59,4 +61,16 @@ public class ServiseLinkStorage : IServiseLinkStorage
     private Uri CreateShortUri(string kyeUri) => Uri.TryCreate(new Uri(_httpContextAccessor.HttpContext.Request.BaseUrl()), kyeUri, out Uri newUri)
         ? newUri
         : throw new Exception(/*TODO: Add text exception*/);
+
+    public async Task<string> GetUrlByShortKeyAsync(string shortKey)
+    {
+        var models = await _repo.GetModelsAsync(e => e.LinkKey.Equals(shortKey));
+        if (models.Count.Equals(0))
+        {
+            throw new Exception(/*TODO: Add text exception*/);
+        }
+        return await Task.Run(() => models
+            .Select(e => e.LinkValue)
+            .FirstOrDefault());
+    }
 }

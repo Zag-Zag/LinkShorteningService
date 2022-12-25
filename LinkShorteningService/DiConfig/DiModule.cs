@@ -4,7 +4,7 @@ using LinkShorteningService.Extension;
 
 namespace LinkShorteningService.DiConfig;
 
-public class DiModule : IDiModule
+internal class DiModule : IDiModule
 {
     public IServiceCollection Registration(IServiceCollection services) =>
         services

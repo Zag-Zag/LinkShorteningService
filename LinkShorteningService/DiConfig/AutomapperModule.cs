@@ -3,7 +3,7 @@ using Repository;
 
 namespace LinkShorteningService.DiConfig;
 
-public class AutomapperModule : IDiModule
+internal class AutomapperModule : IDiModule
 {
     public IServiceCollection Registration(IServiceCollection services) => 
         services

@@ -4,5 +4,5 @@ namespace AbstractDependencies.DiConfig;
 
 public interface IDiModule
 {
-    public IServiceCollection Registration(IServiceCollection services);
+    IServiceCollection Registration(IServiceCollection services);
 }

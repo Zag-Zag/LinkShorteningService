@@ -3,6 +3,7 @@ using LinkShorteningService.DiConfig;
 using LinkShorteningService.Extension;
 using Microsoft.EntityFrameworkCore;
 using Servises.Options;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Register the Swagger generator, defining 1 or more Swagger documents
+builder.Services.AddSwaggerGen(c =>
+    // Set the comments path for the Swagger JSON and UI.
+    c.IncludeXmlComments(
+        Path.Combine(
+            AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml")));
 
 builder.Services.AddHttpContextAccessor();
 

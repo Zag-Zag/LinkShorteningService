@@ -5,17 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 using Servises.Interface;
 
 namespace LinkStorageController.Controllers;
-
+/// 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class LinkStorageController : AbstractController
 {
     private readonly IServiseLinkStorage _servise;
-    public LinkStorageController(IServiseLinkStorage servise)
-    {
-        _servise = servise;
-    }
-
+    /// 
+    public LinkStorageController(IServiseLinkStorage servise) => _servise = servise;
+    /// <summary>
+    /// Сохранение длинного url в системе и возврат сгенерированного короткого адреса и barCoda.
+    /// </summary>
     [HttpPost]
     [Route("CreateShortLink")]
     public async Task<IActionResult> CreateShortLink(Uri url) => await ExecuteAnActionAsync(async () =>
@@ -26,5 +26,5 @@ public class LinkStorageController : AbstractController
             Url = sjortUri,
             BarCode = await Task.Run(async () => File(await _servise.GenerateBarcodeForUrlAsync(sjortUri), "image/jpg"))
         });
-    }); 
+    });
 }
