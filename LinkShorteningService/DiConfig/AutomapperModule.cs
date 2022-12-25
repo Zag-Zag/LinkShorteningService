@@ -5,9 +5,7 @@ namespace LinkShorteningService.DiConfig;
 
 internal class AutomapperModule : IDiModule
 {
-    public IServiceCollection Registration(IServiceCollection services) => 
+    public IServiceCollection Registration(IServiceCollection services) =>
         services
-            .AddAutoMapper(typeof(LinkStatisticProfile))
-            .AddAutoMapper(typeof(LinkStorageProfile))
-            .AddAutoMapper(typeof(StatisticsPropertyProfile));
+            .AddAutoMapper(typeof(LinkStorageProfile));
 }
