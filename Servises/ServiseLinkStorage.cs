@@ -9,9 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Servises.Extension;
 using Microsoft.Extensions.Options;
 using Servises.Options;
-using System;
-using System.Linq;
-using DataBaseEf.Extension;
 
 namespace Servises;
 

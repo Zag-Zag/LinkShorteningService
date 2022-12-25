@@ -6,7 +6,7 @@ public abstract class AbstractController : ControllerBase
 {
     ///
     [NonAction]
-    protected IActionResult ExecuteAnAction(Func<IActionResult> func)
+    protected IActionResult ExecuteAnAction<T>(Func<T> func)
     {
         try
         {
@@ -19,11 +19,11 @@ public abstract class AbstractController : ControllerBase
     }
     ///
     [NonAction]
-    protected async Task<IActionResult> ExecuteAnActionAsync(Func<IActionResult> func) =>
+    protected async Task<IActionResult> ExecuteAnActionAsync<T>(Func<T> func) =>
         await ExecuteAnActionAsync(async () => await Task.Run(() => func()), (e) => Ok(e));
     ///
     [NonAction]
-    protected async Task<IActionResult> ExecuteAnActionAsync(Func<Task<IActionResult>> func) =>
+    protected async Task<IActionResult> ExecuteAnActionAsync<T>(Func<Task<T>> func) =>
         await ExecuteAnActionAsync(func, (e) => Ok(e));
     ///
     [NonAction]
