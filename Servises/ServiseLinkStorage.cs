@@ -27,8 +27,7 @@ public class ServiseLinkStorage : IServiseLinkStorage
     
     public async Task<string> CreateShortToken(Uri uri)
     {
-        var url = HttpUtility.UrlPathEncode(uri.ToString());
-        var crc32 = await GetCrc32Async(url);
+        var crc32 = await GetCrc32Async(uri.AbsolutePath);
         var models = await _repo.GetModelsAsync(e => e.LinkKey.Equals(crc32));
 
         if (models.Count.Equals(0))
@@ -36,7 +35,7 @@ public class ServiseLinkStorage : IServiseLinkStorage
             await _repo.SaveAsync(new()
             {
                 LinkKey = crc32,
-                LinkValue = url
+                LinkValue = uri.AbsolutePath
             });
         }
         return crc32;
